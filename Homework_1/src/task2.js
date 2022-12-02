@@ -18,3 +18,7 @@ rl.on('line', (chunk) => {
   console.log('Writing Chunk');
   writeStream.write(`${chunk}\n`);
 });
+
+rl.on('error', (err) => {
+  console.log(err.message);
+});

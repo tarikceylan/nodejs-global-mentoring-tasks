@@ -17,3 +17,6 @@ rl.on('line', function (chunk) {
   console.log('Writing Chunk');
   writeStream.write("".concat(chunk, "\n"));
 });
+rl.on('error', function (err) {
+  console.log(err.message);
+});
