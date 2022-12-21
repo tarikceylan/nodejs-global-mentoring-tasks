@@ -1,6 +1,5 @@
 import express from 'express';
 import {Express} from 'express';
-import {mockData} from '../data/mockData';
 import {router} from './routes/userRoutes'
 
 const app: Express = express();
