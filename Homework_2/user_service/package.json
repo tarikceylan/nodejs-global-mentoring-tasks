@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.ts",
-    "dev:build": "tsc & nodemon dist/server.js"
+    "dev:build": "tsc & nodemon dist/src/server.js"
   },
   "keywords": [],
   "author": "",

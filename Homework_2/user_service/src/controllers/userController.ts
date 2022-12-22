@@ -89,7 +89,6 @@ export const removeUser = async (req: Request, res: Response) => {
     if(foundUser) {
         foundUser.isDeleted = true
         res.status(200).json({message: `User ${foundUser.login} soft-deleted.`})
-        console.log(mockData)
     } else {
         res.status(400).json({message:  `User Not Found`});
     }
