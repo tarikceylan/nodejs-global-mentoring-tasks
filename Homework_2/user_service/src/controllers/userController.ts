@@ -41,7 +41,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     const userID: string = req.params.id
-    const {login, password, age, isDeleted} = req.body
+    const {login, password, age} = req.body
 
     const foundUser = mockData.find(user => user.id === userID)
 
@@ -50,8 +50,6 @@ export const updateUser = async (req: Request, res: Response) => {
             foundUser.login = login;
             foundUser.password = await bcrypt.hash(password, 10);
             foundUser.age = age;
-            // Check isDeleted value and assign boolean
-            isDeleted === 'true' ? foundUser.isDeleted = true : foundUser.isDeleted = false
         } catch (err: any) {
             res.status(400).json({Error: `${err.message}`})
         }} else {
