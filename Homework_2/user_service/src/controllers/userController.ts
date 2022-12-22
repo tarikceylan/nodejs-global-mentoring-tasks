@@ -3,7 +3,10 @@ import {mockData} from '../../data/mockData';
 import {User} from '../../models/UserModel'
 import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
+import {schema} from '../../utils/validate';
 
+// @desc GET User By ID
+// @route GET /users/id
 
 export const getUserById = (req: Request, res: Response) => {
     const userID = req.params.id;
@@ -11,9 +14,19 @@ export const getUserById = (req: Request, res: Response) => {
     res.json({user: foundUser})
 }
 
+// @desc CREATE User
+// @route POST /users
+
 export const createUser = async (req: Request, res: Response) => { 
 
-    const {login, password, age}: User = req.body;
+    const {login, password, age, isDeleted}: User = req.body;
+
+    try {
+        await schema.validateAsync(req.body)
+     } catch (err: any) {
+         return res.status(400).json({error: `${err.message}`})
+     }
+
 
     // Check Duplicate login
     const userExist = mockData.find(user => user.login === login)
@@ -27,21 +40,30 @@ export const createUser = async (req: Request, res: Response) => {
             const uuid: string = uuidv4();
 
             // Push User
-            mockData.push({id: uuid, login: login, password: hashedPwd, age: age, isDeleted: false });
+            mockData.push({id: uuid, login: login, password: hashedPwd, age: age, isDeleted: isDeleted });
         
-            res.status(201).json({message: `User: ${login} created`})
+            return res.status(201).json({message: `User: ${login} created`})
         } catch (err: any) {
-            res.status(400).json({Error: `${err.message}`})
+            return res.status(400).json({Error: `${err.message}`})
         }
        
     } else {
-        res.status(409).json({message: `User Exist`});
+        return res.status(409).json({message: `User Exist`});
     }
 }
+
+// @desc UPDATE User
+// @route PATCH /users/id
 
 export const updateUser = async (req: Request, res: Response) => {
     const userID: string = req.params.id
     const {login, password, age} = req.body
+
+    try {
+        await schema.validateAsync(req.body)
+     } catch (err: any) {
+         return res.status(400).json({error: `${err.message}`})
+     }
 
     const foundUser = mockData.find(user => user.id === userID)
 
@@ -57,6 +79,10 @@ export const updateUser = async (req: Request, res: Response) => {
     } 
 }
 
+
+// @desc REMOVE user
+// @route DELETE /users/id
+
 export const removeUser = async (req: Request, res: Response) => {
     const userID: string = req.params.id
     const foundUser = mockData.find(user => user.id === userID)
@@ -69,9 +95,13 @@ export const removeUser = async (req: Request, res: Response) => {
     }
 }
 
+// @desc Auto-Suggest User
+// @route GET /auto-suggest/limit/subString
+
 export const getAutoSuggestUsers = (req: Request, res: Response) => {
     const {limit, subStr} = req.params;
-        
+     
+    // Sort Callback
     const compareFn = (a: User,b: User) => {
         if(a.login < b.login) {
             return -1
@@ -84,6 +114,7 @@ export const getAutoSuggestUsers = (req: Request, res: Response) => {
     
     // Shallow Copy mockData
     const sortedData = [...mockData].sort(compareFn)
+
     const result = sortedData.filter(element => 
         element.login.includes(subStr)
     ).slice(0, parseInt(limit));
