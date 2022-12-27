@@ -1,7 +1,7 @@
-export type User = {
+export interface IUser {
   id: string;
   login: string;
   password: string;
   age: number;
-  isDeleted: boolean;
-};
+  is_deleted: boolean;
+}

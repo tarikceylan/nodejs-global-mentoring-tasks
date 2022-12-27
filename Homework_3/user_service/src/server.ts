@@ -1,15 +1,13 @@
 import express from 'express';
 import { Express } from 'express';
-import { router } from './api/routes/userRoutes';
-import { connectDB } from './utils/connDB';
+import { router } from './api/routes/user.route';
+import connectDB from './utils/connectDB';
 
 const app: Express = express();
 
-// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Routes
 app.use('/users', router);
 
 connectDB();

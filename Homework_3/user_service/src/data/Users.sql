@@ -1,13 +1,16 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE IF NOT EXISTS users(
-    ID SERIAL PRIMARY KEY,
+    id UUID DEFAULT uuid_generate_v4(),
     login VARCHAR(255),
     password VARCHAR(255),
     age INT,
-    isDeleted BOOLEAN
+    is_deleted BOOLEAN,
+    PRIMARY KEY(id)
 );
 
-INSERT INTO users VALUES (1, 'JohnDoe', 'john1234', 26, false);
-INSERT INTO users VALUES (2, 'JaneDoe', 'jane1234', 20, false);
-INSERT INTO users VALUES (3, 'JackNich', 'jack1234', 42, false);
-INSERT INTO users VALUES (4, 'TomSmith', 'tom1234', 19, false);
-INSERT INTO users VALUES (5, 'KateSmith', 'kate1234', 52, false);
+INSERT INTO users(login, password, age, is_deleted) VALUES ('JohnDoe', 'john1234', 26, false);
+INSERT INTO users(login, password, age, is_deleted) VALUES ('JaneDoe', 'jane1234', 20, false);
+INSERT INTO users(login, password, age, is_deleted) VALUES ('JackNich', 'jack1234', 42, false);
+INSERT INTO users(login, password, age, is_deleted) VALUES ('TomSmith', 'tom1234', 19, false);
+INSERT INTO users(login, password, age, is_deleted) VALUES ('KateSmith', 'kate1234', 52, false);
